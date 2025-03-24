@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { menus } from '../../constants'
 import { GrRadialSelected } from 'react-icons/gr'
+import { FaShoppingCart } from 'react-icons/fa';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../../redux/slice/cartSlice';
 
 const MenuContainer = () => {
     const [selected,setSelected] = useState(menus[0]);
     const [count,setCount] = useState(0);
     const [itemId,setItemId] = useState();
-    
+    const dispatch = useDispatch();
+
     const IncreamentCount = (id) =>{
         setItemId(id);
         setCount((count) =>count>9?10:count+1);
@@ -16,6 +20,14 @@ const MenuContainer = () => {
         setItemId(id);
         setCount((count) =>count>0?count-1:0)
     };
+
+    const handleAdd = (item) => {
+        if(count===0)   return;
+        const {name,price} = item;
+        const newObj = {id: new Date(), name, priceperQuantity:price, quantity:count, price:price*count };
+        dispatch(addItem(newObj));
+        setCount(0);
+    }
     
     return (
     <>
@@ -47,8 +59,9 @@ const MenuContainer = () => {
                         <div key={menu.id} 
                             className=' flex flex-col items-start justify-center p-4.5 gap-2.5 rounded-lg h-[100%]  cursor-pointer hover:bg-[#2a2a2a] w-[100%] bg-[#1a1a1a]'
                             >
-                            <div className=' flex items-center justify-between w-full'>
+                            <div className='flex items-start justify-between w-full'>
                                 <h1 className='text-[#f5f5f5] text-lg font-semibold'>{menu.name}</h1>
+                                <button className='bg-[#2e4a40] text-[#02ca3a] cursor-pointer p-2 rounded-lg' onClick={()=>handleAdd(menu)}><FaShoppingCart size={20} /></button>
                             </div>
                             <div className='flex items-center justify-between w-full gap-[7%]'>
                             <p className=' text-[#f5f5f5] text-xl font-bold'>₹{menu.price}</p>

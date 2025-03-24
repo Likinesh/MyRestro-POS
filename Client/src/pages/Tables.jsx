@@ -7,7 +7,7 @@ import { tables } from '../constants'
 const Tables = () => {
     const [state,setState] = useState('all');
   return (
-    <section className='bg-[#1f1f1f] h-[calc(150vh-5rem)] overflow-hidden'>
+    <section className='bg-[#1f1f1f] overflow-hidden'>
         <div className='flex items-center justify-between px-10 py-4'>
             <div className='flex items-center gap-4'>
                 <Backbutton />
@@ -20,7 +20,7 @@ const Tables = () => {
             <button onClick={()=>setState('booked')} className={`text-[#ababab] text-lg  font-semibold cursor-pointer ${state === 'booked' && "bg-[#383838] rounded-lg px-5 py-2"}`}>In Progress</button>
         </div>
         </div>
-        <div className='flex flex-wrap gap-5 p-10'>
+        <div className='flex flex-wrap gap-4 p-10'>
             {
                 tables.map((table)=>{
                     return (
