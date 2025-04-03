@@ -1,6 +1,6 @@
 import express from 'express'
-import { isVerified } from '../middleware/tokenVerify';
-import { addTable, getTable, updateTable } from '../controllers/tableController';
+import { isVerified } from '../middleware/tokenVerify.js';
+import { addTable, getTable, updateTable } from '../controllers/tableController.js';
 const Router = express.Router();
 
 Router.post('/',isVerified,addTable);

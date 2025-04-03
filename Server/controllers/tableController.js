@@ -1,11 +1,10 @@
 import createHttpError from "http-errors";
-import tableModal from "../models/tableModal";
-import createHttpError from "http-errors";
+import tableModal from "../models/tableModal.js";
 import mongoose from "mongoose";
 
 export const addTable = async(req,res,next)=>{
     try {
-        const { tableNo } = req.body;
+        const { tableNo,seats } = req.body;
         if(!tableNo){
             const error = createHttpError(400,"Provide Table No!");
             return next(error)
@@ -17,7 +16,7 @@ export const addTable = async(req,res,next)=>{
             return next(error)
         }
 
-        const new_table = new tableModal({tableNo});
+        const new_table = new tableModal({tableNo,seats});
         await new_table.save();
 
         res.status(201).json({success:true,message:'Table Added!',data:new_table});

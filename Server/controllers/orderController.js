@@ -1,5 +1,5 @@
 import createHttpError from "http-errors";
-import orderModel from "../models/orderModel"
+import orderModel from "../models/orderModel.js"
 import mongoose from "mongoose";
 
 export const add_order = async (req,res,next) =>{
