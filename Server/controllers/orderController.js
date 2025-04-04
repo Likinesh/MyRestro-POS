@@ -37,7 +37,7 @@ export const get_order = async (req,res,next) =>{
 
 export const get_orders = async (req,res,next) =>{
     try {
-        const orders = await orderModel.find();
+        const orders = await orderModel.find().populate("table");
         res.status(200).json({success:true,data:orders});
     } catch (error) {
         next(error);

@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
 import {IoMdClose} from 'react-icons/io'
+import { enqueueSnackbar } from 'notistack';
 import { motion } from 'framer-motion';
+import { useMutation } from '@tanstack/react-query'
+import { AddTable } from '../../https';
 const Modal = ({isModalOpen}) => {
 
     const [tableData,setTableData] = useState({
@@ -17,7 +20,21 @@ const Modal = ({isModalOpen}) => {
     const handlesubmit = (e) => {
         e.preventDefault();
         console.log(tableData);
+        tableMutation.mutate(tableData);
     }
+
+    const tableMutation = useMutation({
+        mutationFn: (reqData)=> AddTable(reqData),
+        onSuccess:(res)=>{
+            isModalOpen(false);
+            const { data } = res;
+            enqueueSnackbar(data.message,{variant:'success'});
+        },
+        onError:(error)=>{
+            const {data} = error.response;
+            enqueueSnackbar(data.message,{variant:'error'});
+        }
+    })
 
     const handleClose = ()=>{
         isModalOpen(false)

@@ -2,9 +2,24 @@ import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Ordercard from '../components/order/Ordercard'
 import Backbutton from '../components/Backbutton'
+import {keepPreviousData, useQuery} from '@tanstack/react-query';
+import { getOrder } from '../https';
+import {enqueueSnackbar} from 'notistack'
 
 const Orders = () => {
   const [state,setState] = useState('all');
+  const { data:resData,isError } = useQuery({
+    queryKey:['orders'],
+    queryFn:async()=>{
+      return await getOrder();
+    },
+    placeholderData:keepPreviousData
+  });
+
+  if(isError){
+    enqueueSnackbar("Something Went Wrong!",{variant:'error'});
+  }
+
   return (
     <section className='bg-[#1f1f1f] h-[calc(150vh-5rem)] overflow-hidden'>
       <div className='flex items-center justify-between px-10 py-4'>
@@ -20,31 +35,15 @@ const Orders = () => {
         </div>
       </div>
 
-      <div className='px-14 py-4 flex flex-wrap gap-6 items-center overflow-y-scroll scrollbar-hidden h-[calc(150vh-5rem)]'>
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
-        <Ordercard />
+      <div className='px-14 py-4 flex flex-wrap gap-6 items-center overflow-y-scroll scrollbar-hidden'>
+        {
+          resData?.data.length>0 ? (
+            resData.data.data.map((order)=>{
+              return <Ordercard key={order._id} order={order} />
+            })
+          ):
+          <p className='col-span-3 text-gray-500'>No Order Available</p>
+        }
       </div>
 
       <Navbar />

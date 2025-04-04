@@ -34,7 +34,7 @@ export default function Header() {
   return (
     <header className="flex justify-between items-center py-4 px-4 bg-[#1a1a1a]">
       {/* Logo */}
-      <div className='flex items-center gap-2'>
+      <div onClick={()=>navigate('/')} className='flex items-center gap-2 cursor-pointer'>
         <img src={logo} className='h-8 w-8' alt='Restro Logo'/>
         <h1 className='text-lg font-semibold text-[#f5f5f5]'>Restro</h1>
       </div>

@@ -28,7 +28,10 @@ export const addTable = async(req,res,next)=>{
 
 export const getTable = async(req,res,next)=>{
     try {
-        const tables = await tableModal.find();
+        const tables = await tableModal.find().populate({
+            path:'currentOrder',
+            select:'customerDetails'
+        });
         res.status(201).json({success:true,data:tables});
     } catch (error) {
         next(error);

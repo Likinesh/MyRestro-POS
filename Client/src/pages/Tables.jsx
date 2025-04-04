@@ -1,13 +1,28 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Backbutton from '../components/Backbutton'
 import TableCard from '../components/tables/TableCard'
 import { tables } from '../constants'
+import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import { getTables } from '../https'
+import {enqueueSnackbar} from 'notistack'
 
 const Tables = () => {
     const [state,setState] = useState('all');
+    const {data:resData,isError} = useQuery({
+        queryKey:["tables"],
+        queryFn: async () => {
+            return await getTables();
+        },
+        placeholderData:keepPreviousData
+    }) ;
+
+    if(isError){
+        enqueueSnackbar("Something went Wrong",{variant:'error'});
+    }
   return (
-    <section className='bg-[#1f1f1f] overflow-hidden'>
+    <section className='bg-[#1f1f1f] overflow-hidden h-screen'>
         <div className='flex items-center justify-between px-10 py-4'>
             <div className='flex items-center gap-4'>
                 <Backbutton />
@@ -22,9 +37,9 @@ const Tables = () => {
         </div>
         <div className='flex flex-wrap gap-4 p-10'>
             {
-                tables.map((table)=>{
+                resData?.data.data.map((table)=>{
                     return (
-                        <TableCard key={table.id} seats={table.seats} id={table.id} name={table.name} status={table.status} intial={table.initial} />
+                        <TableCard seats={table.seats} id={table._id} name={table.tableNo} status={table.status} intial={table?.currentOrder?.customerDetails?.name} />
                     )
                 })
             }
