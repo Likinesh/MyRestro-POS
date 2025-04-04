@@ -25,3 +25,4 @@ export const verifyPaymentRazorpay = (data) => api.post('/api/payment/verify-pay
 
 export const addOrder = (data) => api.post('/api/order',data)
 export const getOrder = () => api.get('/api/order');
+export const updateOrder = ({orderId,orderStatus})=>api.put(`/api/order/${orderId}`,{orderStatus})
